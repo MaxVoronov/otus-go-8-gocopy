@@ -10,25 +10,30 @@ type Options struct {
 	BlockSize  int64
 }
 
+var ErrorSourcePathEmpty = errors.New("path to source file is required")
+var ErrorResultPathEmpty = errors.New("path to result file is required")
+var ErrorOffsetLessZero = errors.New("offset can not be less than zero")
+var ErrorBlockSizeLessZero = errors.New("block size can not be equal or less than zero")
+
 func NewOptions() *Options {
 	return &Options{}
 }
 
 func (opt *Options) Validate() error {
 	if opt.SourceFile == "" {
-		return errors.New("path to source file is required")
+		return ErrorSourcePathEmpty
 	}
 
 	if opt.ResultFile == "" {
-		return errors.New("path to result file is required")
+		return ErrorResultPathEmpty
 	}
 
 	if opt.Offset < 0 {
-		return errors.New("offset can not be less than zero")
+		return ErrorOffsetLessZero
 	}
 
-	if opt.Offset <= 0 {
-		return errors.New("block size can not be equal or less than zero")
+	if opt.BlockSize <= 0 {
+		return ErrorBlockSizeLessZero
 	}
 
 	return nil
